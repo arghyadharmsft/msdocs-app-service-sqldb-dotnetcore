@@ -3,7 +3,7 @@ using DotNetCoreSqlDb.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add database context and cache
-if(builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<MyDatabaseContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("MyDbConnection")));
@@ -13,11 +13,13 @@ else
 {
     builder.Services.AddDbContext<MyDatabaseContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {
-    options.Configuration = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"];
-    options.InstanceName = "SampleInstance";
-    });
+    // builder.Services.AddStackExchangeRedisCache(options =>
+    // {
+    // options.Configuration = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"];
+    // options.InstanceName = "SampleInstance";
+    // }
+
+    builder.Services.AddDistributedMemoryCache();
 }
 
 // Add services to the container.
